@@ -11,7 +11,7 @@
     '-Wall',
     '-W',
     '-Wno-unused-parameter',
-    '-std=gnu++11',
+    '-std=gnu++17',
   ],
 
   'defines': [
