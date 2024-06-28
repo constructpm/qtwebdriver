@@ -3,8 +3,8 @@ import os
 import sys
 
 if (len(sys.argv) != 4):
-    print 'Wrong usage:'
-    print ' do_if_modified <bin_file> <input_file> <output_file>'
+    print('Wrong usage:')
+    print(' do_if_modified <bin_file> <input_file> <output_file>')
     exit()
 
 action_process = os.path.abspath(sys.argv[1])
