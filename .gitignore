@@ -17,7 +17,6 @@ report/*
 /build/
 /docs/
 /mocs/
-wd.gypi
 /wd.Makefile
 /Makefile
 /WebDriver.target.mk
