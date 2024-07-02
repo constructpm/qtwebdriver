@@ -3,7 +3,7 @@ name: CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [WD_1.X_dev]
     paths-ignore:
       - '**/*.md'
   push:
@@ -11,20 +11,7 @@ on:
       - v*
 
 env:
-  QTVERSION: 5.15.0-lts
-  BUILD_CONFIG: "{
-      'variables': {
-        'QT5': '1',
-        'WD_CONFIG_QWIDGET_BASE': '1',
-        'WD_CONFIG_WEBKIT': '0',
-        'WD_CONFIG_QUICK': '1',
-        'WD_CONFIG_PLAYER': '0',
-        'WD_CONFIG_ONE_KEYRELEASE': '0',
-        'QT_INC_PATH': '/opt/qt5/include',
-        'QT_BIN_PATH': '/opt/qt5/bin',
-        'QT_LIB_PATH': '/opt/qt5/lib'
-      },
-    }"
+  QTVERSION: 5.15.8-lts-lgpl
 
 jobs:
   tar-src:
@@ -76,25 +63,27 @@ jobs:
             libicu-dev \
             libjpeg-dev \
             libpng-dev \
+            libunwind-dev \
             libxslt1-dev \
       - name: Install Qt
-        run: curl -L https://github.com/constructpm/qt-build/releases/download/v5.15.8-lts-lgpl-1/qt-5.15.8-lts-lgpl-cpp17-${{ matrix.config.os }}x64.tar.gz | sudo tar -xJC /opt
+        run: curl -L https://github.com/constructpm/qt-build/releases/download/v5.15.8-lts-lgpl-1/qt-5.15.8-lts-lgpl-cpp17-${{ matrix.config.os }}-x64.tar.gz | sudo tar -xJC /opt
       - name: Install Qtwebkit
         run: curl -L https://github.com/constructpm/qtwebkit-build/releases/download/v5.212.0-1/qtwebkit-d1c854e-cpp17-${{ matrix.config.os }}-x64.tar.gz | sudo tar xvJ -C /opt
       - name: checkout
         uses: actions/checkout@v4
-      - name: Configure
-        run: echo ${BUILDCONFIG} > wd.gypi
       - name: Build
-        run: build.sh
+        working-directory: ${{ github.workspace }}
+        run: ./build.sh
       - name: Archive
-        working-directory: ${{ github.workspace }}/opt
-        run: tar cJfv "${{ steps.config.outputs.artefact_name }}" qtwebdriver
+        working-directory: ${{ github.workspace }}
+        run: |
+          mv out qtwebdriver
+          tar cJfv "${{ steps.config.outputs.artefact_name }}" qtwebdriver
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: "${{ steps.config.outputs.artefact_name }}"
-          path: "${{ github.workspace }}/opt/${{ steps.config.outputs.artefact_name }}"
+          path: "${{ github.workspace }}/${{ steps.config.outputs.artefact_name }}"
 
   release:
     if: contains(github.ref, 'tags/v')
