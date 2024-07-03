@@ -11,7 +11,8 @@ on:
       - v*
 
 env:
-  QTVERSION: 5.15.8-lts-lgpl
+  # 5.15.3 is the version of Qt you get when you install qt5 libraries via `apt install`
+  QTVERSION: 5.15.3
 
 jobs:
   tar-src:
