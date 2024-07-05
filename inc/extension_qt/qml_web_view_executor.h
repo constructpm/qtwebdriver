@@ -159,7 +159,7 @@ public:
 protected:
     QDeclarativeWebView* getView(const ViewId& viewId, Error** error);
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0) && QT_VERSION <= QT_VERSION_CHECK(6, 0, 0))
     QTouchDevice touchDevice;
 #endif
 

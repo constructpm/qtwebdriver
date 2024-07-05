@@ -367,10 +367,29 @@ void QViewCmdExecutor::GetOrientation(std::string *orientation, Error **error)
 
 QTouchEvent::TouchPoint QViewCmdExecutor::createTouchPoint(Qt::TouchPointState state, QPointF &point)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QEventPoint::State convertedState = QEventPoint::Unknown;
+    switch(state) {
+        case Qt::TouchPointPressed:
+            convertedState = QEventPoint::Pressed;
+            break;
+        case Qt::TouchPointMoved:
+            convertedState = QEventPoint::Updated;
+            break;
+        case Qt::TouchPointStationary:
+            convertedState = QEventPoint::Stationary;
+            break;
+        case Qt::TouchPointReleased:
+            convertedState = QEventPoint::Released;
+            break;
+    }
+    QTouchEvent::TouchPoint touchPoint(1, convertedState, point, point);
+#else
     QTouchEvent::TouchPoint touchPoint(1);
     touchPoint.setPos(point);
     touchPoint.setState(state);
     touchPoint.setPressure(1);
+#endif
     return touchPoint;
 }
 
@@ -392,7 +411,10 @@ QTouchEvent* QViewCmdExecutor::createSimpleTouchEvent(QEvent::Type eventType, Qt
 
 QTouchEvent* QViewCmdExecutor::createTouchEvent(QEvent::Type eventType, Qt::TouchPointStates touchPointStates, const QList<QTouchEvent::TouchPoint> &touchPoints)
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QTouchEvent *touchEvent = new QTouchEvent(eventType, nullptr, Qt::NoModifier, touchPoints);
+#elif (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
     QTouchEvent *touchEvent = new QTouchEvent(eventType, &touchDevice, Qt::NoModifier, touchPointStates, touchPoints);
     QDateTime current = QDateTime::currentDateTime();
     ulong timestame = current.toMSecsSinceEpoch() & (((qint64)1<<(sizeof(ulong)*8))-1);
@@ -423,10 +445,29 @@ QTouchEvent* QViewCmdExecutor::create2PointTouchEvent(QEvent::Type eventType, Qt
 
 QTouchEvent::TouchPoint QViewCmdExecutor::createTouchPointWithId(Qt::TouchPointState state, QPointF &point, int id)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QEventPoint::State convertedState = QEventPoint::Unknown;
+    switch(state) {
+        case Qt::TouchPointPressed:
+            convertedState = QEventPoint::Pressed;
+            break;
+        case Qt::TouchPointMoved:
+            convertedState = QEventPoint::Updated;
+            break;
+        case Qt::TouchPointStationary:
+            convertedState = QEventPoint::Stationary;
+            break;
+        case Qt::TouchPointReleased:
+            convertedState = QEventPoint::Released;
+            break;
+    }
+    QTouchEvent::TouchPoint touchPoint(id, convertedState, point, point);
+#else
     QTouchEvent::TouchPoint touchPoint(id);
     touchPoint.setPos(point);
     touchPoint.setState(state);
     touchPoint.setPressure(1);
+#endif
 
     return touchPoint;
 }
