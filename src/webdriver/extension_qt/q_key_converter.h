@@ -29,7 +29,7 @@ public:
                                const Logger& logger,
                                bool release_modifiers,
                                int* modifiers,
-                               std::vector<QKeyEvent>* client_key_events,
+                               std::list<QKeyEvent>* client_key_events,
                                std::string* error_msg);
 private:
     QKeyConverter() {};

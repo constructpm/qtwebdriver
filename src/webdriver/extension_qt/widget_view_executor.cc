@@ -186,7 +186,7 @@ void QWidgetViewCmdExecutor::SendKeys(const ElementId& element, const string16& 
     }
 
     std::string err_msg;
-    std::vector<QKeyEvent> key_events;
+    std::list<QKeyEvent> key_events;
     int modifiers = Qt::NoModifier;
 
     if (!QKeyConverter::ConvertKeysToWebKeyEvents(keys,
@@ -200,7 +200,7 @@ void QWidgetViewCmdExecutor::SendKeys(const ElementId& element, const string16& 
         return;
     }
 
-    std::vector<QKeyEvent>::iterator it = key_events.begin();
+    std::list<QKeyEvent>::iterator it = key_events.begin();
     while (it != key_events.end()) {
         qApp->sendEvent(pWidget, &(*it));
         ++it;
