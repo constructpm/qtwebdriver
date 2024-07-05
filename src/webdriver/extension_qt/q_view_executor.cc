@@ -31,7 +31,9 @@
 #include <QtCore/QDebug>
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtWidgets/QApplication>
+#if (QT_VERSION <= QT_VERSION_CHECK(6, 0, 0))
 #include <QtWidgets/QDesktopWidget>
+#endif
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QInputDialog>
 #include <QtCore/QDateTime>
@@ -121,7 +123,7 @@ void QViewCmdExecutor::Maximize(Error** error) {
         return;
     }
 
-    view->setGeometry(QApplication::desktop()->rect());    
+    view->setGeometry(QGuiApplication::primaryScreen()->geometry());
 }
 
 void QViewCmdExecutor::GetScreenShot(std::string* png, Error** error) {
