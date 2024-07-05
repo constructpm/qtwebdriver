@@ -217,7 +217,7 @@ void QmlWebViewCmdExecutor::SendKeys(const string16& keys, Error** error) {
     CHECK_VIEW_EXISTANCE
 
     std::string err_msg;
-    std::vector<QKeyEvent> key_events;
+    std::list<QKeyEvent> key_events;
     int modifiers = session_->get_sticky_modifiers();
 
     if (!QKeyConverter::ConvertKeysToWebKeyEvents(keys,
@@ -233,7 +233,7 @@ void QmlWebViewCmdExecutor::SendKeys(const string16& keys, Error** error) {
 
     session_->set_sticky_modifiers(modifiers);
 
-    std::vector<QKeyEvent>::iterator it = key_events.begin();
+    std::list<QKeyEvent>::iterator it = key_events.begin();
     while (it != key_events.end()) {
 
         bool consumed = WDEventDispatcher::getInstance()->dispatch(&(*it));
@@ -272,7 +272,7 @@ void QmlWebViewCmdExecutor::SendKeys(const ElementId& element, const string16& k
         return;
 
     std::string err_msg;
-    std::vector<QKeyEvent> key_events;
+    std::list<QKeyEvent> key_events;
     int modifiers = Qt::NoModifier;
 
     if (!QKeyConverter::ConvertKeysToWebKeyEvents(keys,
@@ -286,7 +286,7 @@ void QmlWebViewCmdExecutor::SendKeys(const ElementId& element, const string16& k
         return;
     }
 
-    std::vector<QKeyEvent>::iterator it = key_events.begin();
+    std::list<QKeyEvent>::iterator it = key_events.begin();
     while (it != key_events.end()) {
         qApp->sendEvent(view_->page(), &(*it));
         ++it;
