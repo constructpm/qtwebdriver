@@ -12,12 +12,22 @@
 #include <QtCore/QPointer>
 
 #include <QtCore/QtGlobal>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+
+#include <QtWidgets/QWidget>
+#include <QtGui/QAction>
+
+#elif (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QAction>
+
 #else
+
 #include <QtGui/QWidget>
 #include <QtGui/QAction>
+
 #endif
 
 namespace webdriver {

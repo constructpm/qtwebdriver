@@ -38,7 +38,27 @@
 #include <QtCore/QBuffer>
 #include <QtCore/QDebug>
 #include <QtCore/QTimer>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPlainTextEdit>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QInputDialog>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QScrollArea>
+#include <QtWidgets/QProgressBar>
+#include <QtWidgets/QListView>
+#include <QtGui/QAction>
+#if (1 == WD_ENABLE_PLAYER)
+#include <QtMultimediaWidgets/QVideoWidget>
+#include <QtMultimedia/QMediaPlayer>
+#endif //WD_ENABLE_PLAYER
+#elif (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPlainTextEdit>
