@@ -18,7 +18,36 @@
     ],
 
     'conditions': [
-      [ '<(QT5) == 1', {
+      [ '<(QT6) == 1', {
+        'conditions': [
+          ['OS=="linux"', {
+            'libraries': [
+              '-L<(QT_LIB_PATH)',
+              '-lQt6Network',
+              '-lQt6Widgets',
+              '-lQt6Quick',
+              '-lQt6Qml',
+              '-lQt6Sql',
+              '-lQt6Gui',
+              '-lQt6Xml',
+              '-lQt6OpenGL',
+              '-lQt6PrintSupport',
+              '-lQt6Core',
+              '-lpthread',
+              '-lrt',
+              '-ldl',
+              '-licuuc',
+              '-licudata',
+              '-licui18n',
+              '-lQt6MultimediaWidgets',
+              '-lQt6Sensors',
+              '-lQt6Multimedia',
+              '-lQt6Positioning',
+              '-lQt6Core5Compat',
+            ],
+          } ],
+        ]
+      }, '<(QT5) == 1', {
         'conditions': [
           ['OS=="linux"', {
             'libraries': [
@@ -261,14 +290,14 @@
         '<(INTERMEDIATE_DIR)/moc_MenuTest.cc',
       ],
       'conditions': [
-        [ '<(QT5) == 1 and <(WD_CONFIG_PLAYER) == 1', {
+        [ '<(WD_CONFIG_PLAYER) == 1 and <(QT5) == 1 or <(QT6) == 1', {
           'sources': [
             'src/Test/VideoTest.h',
             'src/Test/VideoTest.cc',
             '<(INTERMEDIATE_DIR)/moc_VideoTest.cc',
           ],
         } ],
-        [ 'OS != "android" and <(QT5) == 0', {
+        [ 'OS != "android" and <(QT5) == 0 and <(QT6) == 0', {
           'sources': [
             'src/Test/WindowWithDeclarativeViewTest.cc',
             'src/Test/WindowWithDeclarativeViewTest.h',
@@ -314,7 +343,13 @@
           ],
         } ],
        
-        [ '<(QT5) == 1', {
+        [ '<(QT6) == 1', {
+          'conditions': [
+            ['OS=="linux"', {
+              'libraries': ['-lQt6WebKitWidgets', '-lQt6WebKit',],
+            } ],
+          ],
+        }, '<(QT5) == 1', {
           'conditions': [
             ['OS=="linux"', {
               'libraries': ['-lQt5WebKitWidgets', '-lQt5WebKit',],

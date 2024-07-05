@@ -60,7 +60,7 @@
 
       'conditions': [
       
-        ['<(QT5) == 0', {
+        ['<(QT5) == 0 and <(QT6) == 0', {
           'dependencies': [
             'src/third_party/mimetypes-qt4/mimetypes-qt4.gyp:mimetypes-qt4',
           ],
@@ -103,7 +103,7 @@
 
       'conditions': [
       
-        ['<(QT5) == 1', {
+        ['<(QT5) == 1 or <(QT6) == 1', {
 
           'sources': [
             'src/webdriver/extension_qt/qwindow_view_handle.cc',
@@ -138,7 +138,7 @@
 
       'conditions': [
       
-        ['<(QT5) == 1', {
+        ['<(QT5) == 1 or <(QT6) == 1', {
 
           'sources': [
             # TODO: Quick2 support
