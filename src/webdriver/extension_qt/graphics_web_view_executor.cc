@@ -375,7 +375,12 @@ void GraphicsWebViewCmdExecutor::MouseWheel(const int delta, Error** error) {
 
     QPoint point = QCommonUtil::ConvertPointToQPoint(session_->get_mouse_position());
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QPoint globalPos = point; // QGraphicsWebView doesn't provide and obvious function for converting from localSpace to globalSpace
+    QWheelEvent *wheelEvent = new QWheelEvent(point, globalPos, QPoint(0, 0), QPoint(0, delta), Qt::NoButton, Qt::NoModifier, Qt::NoScrollPhase, false);
+#else
     QWheelEvent *wheelEvent = new QWheelEvent(point, delta, Qt::NoButton, Qt::NoModifier);
+#endif
 
     QApplication::postEvent(view_->page(), wheelEvent);
 }

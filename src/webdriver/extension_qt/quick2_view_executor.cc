@@ -359,6 +359,9 @@ void Quick2ViewCmdExecutor::MouseWheel(const int delta, Error **error) {
 
     QPoint angleDelta(0, delta);
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QWheelEvent *wheelEvent = new QWheelEvent(scenePoint, screenPos, pixelDelta, angleDelta, Qt::NoButton, Qt::NoModifier, Qt::NoScrollPhase, false);
+#else
     QWheelEvent *wheelEvent = new QWheelEvent(scenePoint,
                                               screenPos,
                                               pixelDelta,
@@ -367,6 +370,7 @@ void Quick2ViewCmdExecutor::MouseWheel(const int delta, Error **error) {
                                               Qt::Vertical,
                                               Qt::NoButton,
                                               Qt::NoModifier);
+#endif
 
     QGuiApplication::postEvent(view, wheelEvent);
 }
