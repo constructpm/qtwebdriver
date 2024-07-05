@@ -258,7 +258,7 @@ Qt::MouseButton QWindowViewCmdExecutor::ConvertMouseButtonToQtMouseButton(MouseB
     switch(button)
     {
         case kLeftButton: result = Qt::LeftButton; break;
-        case kMiddleButton: result = Qt::MidButton; break;
+        case kMiddleButton: result = Qt::MiddleButton; break;
         case kRightButton: result = Qt::RightButton; break;
         default: result = Qt::NoButton;
     }
