@@ -341,7 +341,11 @@ void QQmlViewCmdExecutor::MouseWheel(const int delta, Error **error) {
 
     session_->logger().Log(kFineLogLevel, base::StringPrintf("MouseWheel, screen: (%4d, %4d)", screenPos.x(), screenPos.y()));
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QWheelEvent *wheelEvent = new QWheelEvent(viewPos, screenPos, QPoint(0, 0), QPoint(0, delta), Qt::NoButton, Qt::NoModifier, Qt::NoScrollPhase, false);
+#else
     QWheelEvent *wheelEvent = new QWheelEvent(viewPos, screenPos, delta, Qt::NoButton, Qt::NoModifier);
+#endif
 
     QApplication::postEvent(view->viewport(), wheelEvent);
 }

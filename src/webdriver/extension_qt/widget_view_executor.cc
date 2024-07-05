@@ -394,7 +394,12 @@ void QWidgetViewCmdExecutor::MouseWheel(const int delta, Error **error){
     QPoint globalPos = receiverWidget->mapToGlobal(point);
     session_->logger().Log(kFineLogLevel, base::StringPrintf("MouseWheel, screen: (%4d, %4d)", globalPos.x(), globalPos.y()));
 
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QWheelEvent *wheelEvent = new QWheelEvent(point, globalPos, QPoint(0, 0), QPoint(0, delta), Qt::NoButton, Qt::NoModifier, Qt::NoScrollPhase, false);
+#else
     QWheelEvent *wheelEvent = new QWheelEvent(point, globalPos, delta, Qt::NoButton, Qt::NoModifier);
+#endif
 
     QApplication::postEvent(receiverWidget, wheelEvent);
 }
