@@ -30,7 +30,9 @@
 
 #include <QtCore/QDebug>
 #include <QtGui/QTouchEvent>
+#if (QT_VERSION <= QT_VERSION_CHECK(6, 0, 0))
 #include <QtGui/QTouchDevice>
+#endif
 #include <QtGui/QWindow>
 
 namespace webdriver {
@@ -70,7 +72,9 @@ protected:
     QTouchEvent* createTouchEvent(QEvent::Type eventType, Qt::TouchPointStates touchPointStates, const QList<QTouchEvent::TouchPoint> &touchPoints);
 
 private:
+#if (QT_VERSION <= QT_VERSION_CHECK(6, 0, 0))
     QTouchDevice touchDevice;
+#endif
     DISALLOW_COPY_AND_ASSIGN(QWindowViewCmdExecutor);
 };
 

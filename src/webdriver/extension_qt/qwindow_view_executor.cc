@@ -39,7 +39,9 @@ namespace webdriver {
 
 QWindowViewCmdExecutor::QWindowViewCmdExecutor(Session* session, ViewId viewId)
     : ViewCmdExecutor(session, viewId) {
+#if (QT_VERSION <= QT_VERSION_CHECK(6, 0, 0))
      touchDevice.setCapabilities(QTouchDevice::Velocity);
+#endif
 }
 
 QWindowViewCmdExecutor::~QWindowViewCmdExecutor() {
@@ -268,21 +270,61 @@ Qt::MouseButton QWindowViewCmdExecutor::ConvertMouseButtonToQtMouseButton(MouseB
 
 QTouchEvent::TouchPoint QWindowViewCmdExecutor::createTouchPoint(Qt::TouchPointState state, QPointF &point, QVector2D velocity)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QEventPoint::State convertedState = QEventPoint::Unknown;
+    switch(state) {
+        case Qt::TouchPointPressed:
+            convertedState = QEventPoint::Pressed;
+            break;
+        case Qt::TouchPointMoved:
+            convertedState = QEventPoint::Updated;
+            break;
+        case Qt::TouchPointStationary:
+            convertedState = QEventPoint::Stationary;
+            break;
+        case Qt::TouchPointReleased:
+            convertedState = QEventPoint::Released;
+            break;
+    }
+    QTouchEvent::TouchPoint touchPoint(1, convertedState, point, point);
+
+    touchPoint.velocity() = velocity;
+#else
     QTouchEvent::TouchPoint touchPoint(1);
     touchPoint.setPos(point);
     touchPoint.setState(state);
     touchPoint.setPressure(1);
 
     touchPoint.setVelocity(velocity);
+#endif
     return touchPoint;
 }
 
 QTouchEvent::TouchPoint QWindowViewCmdExecutor::createTouchPointWithId(Qt::TouchPointState state, QPointF &point, int id)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QEventPoint::State convertedState = QEventPoint::Unknown;
+    switch(state) {
+        case Qt::TouchPointPressed:
+            convertedState = QEventPoint::Pressed;
+            break;
+        case Qt::TouchPointMoved:
+            convertedState = QEventPoint::Updated;
+            break;
+        case Qt::TouchPointStationary:
+            convertedState = QEventPoint::Stationary;
+            break;
+        case Qt::TouchPointReleased:
+            convertedState = QEventPoint::Released;
+            break;
+    }
+    QTouchEvent::TouchPoint touchPoint(id, convertedState, point, point);
+#else
     QTouchEvent::TouchPoint touchPoint(id);
     touchPoint.setPos(point);
     touchPoint.setState(state);
     touchPoint.setPressure(1);
+#endif
 
     return touchPoint;
 }
@@ -323,10 +365,16 @@ QTouchEvent* QWindowViewCmdExecutor::create2PointTouchEvent(QEvent::Type eventTy
 
 QTouchEvent* QWindowViewCmdExecutor::createTouchEvent(QEvent::Type eventType, Qt::TouchPointStates touchPointStates, const QList<QTouchEvent::TouchPoint> &touchPoints)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    QTouchEvent *touchEvent = new QTouchEvent(eventType, nullptr, Qt::NoModifier, touchPoints);
+#elif (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
     QTouchEvent *touchEvent = new QTouchEvent(eventType, &touchDevice, Qt::NoModifier, touchPointStates, touchPoints);
     QDateTime current = QDateTime::currentDateTime();
     ulong timestame = current.toMSecsSinceEpoch() & (((qint64)1<<(sizeof(ulong)*8))-1);
     touchEvent->setTimestamp(timestame);
+#else
+    QTouchEvent *touchEvent = new QTouchEvent(eventType, QTouchEvent::TouchScreen, Qt::NoModifier, touchPointStates, touchPoints);
+#endif
     return touchEvent;
 }
 
