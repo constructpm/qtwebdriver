@@ -71,7 +71,12 @@ ElementAttributeTestWidget::ElementAttributeTestWidget() :
     pradioBtnBlue->setObjectName("defaultSelected");
 
     QPalette* palette1 = new QPalette();
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    palette1->setColor(QPalette::WindowText,Qt::darkBlue);
+#else
     palette1->setColor(QPalette::Foreground,Qt::darkBlue);
+#endif
     pradioBtnBlue->setPalette(*palette1);
     pradioBtnBlue->setStyleSheet("background-color: blue");
 
