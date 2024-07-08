@@ -720,7 +720,11 @@ Error* QWebkitProxy::GetCookies(const std::string& url, base::ListValue** cookie
         cookie_dict->SetBoolean("secure", cookie.isSecure());
         cookie_dict->SetBoolean("http_only", cookie.isHttpOnly());
         if (!cookie.isSessionCookie())
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+            cookie_dict->SetDouble("expiry", (double)cookie.expirationDate().toSecsSinceEpoch());
+#else
             cookie_dict->SetDouble("expiry", (double)cookie.expirationDate().toTime_t());
+#endif
 
         list->Append(cookie_dict);
     }
@@ -790,7 +794,11 @@ Error* QWebkitProxy::SetCookie(const std::string& url, base::DictionaryValue* co
         //qDebug()<<"[WD]:" << "time=[" << time <<"]";
 
         QDateTime qtime;
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        qtime.setSecsSinceEpoch(time);
+#else
         qtime.setTime_t(time);
+#endif
 
         if (qtime > QDateTime::currentDateTime()) {
             session_->logger().Log(kFineLogLevel, "SetCookie - adding cookie");
