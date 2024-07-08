@@ -24,7 +24,11 @@
 #include <QtNetwork/QNetworkRequest>
 #include <QtNetwork/QNetworkReply>
 #include <QtWebKit/QWebElement>
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#include <QtWebKitWidgets/QWebFrame>
+#include <QtCore5Compat/QRegExp>
+#elif (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 #include <QtWebKitWidgets/QWebFrame>
 #else
 #include <QtWebKit/QWebFrame>
