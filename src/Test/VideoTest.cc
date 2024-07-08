@@ -19,6 +19,7 @@
 
 #include "VideoTest.h"
 #include <string>
+#include <QtMultimedia/QMediaMetaData>
 
 std::string testDataFolder;
 
@@ -28,7 +29,11 @@ VideoTestWidget::VideoTestWidget(QWidget *parent) :
     this->setGeometry(0, 0, 600, 400);
     this->setMinimumSize(400, 400);
     this->setMaximumSize(800, 800);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    mediaPlayer = new QMediaPlayer(NULL);
+#else
     mediaPlayer = new QMediaPlayer(NULL, QMediaPlayer::VideoSurface);
+#endif
     videoWidget = new QVideoWidget();
     videoWidget->setObjectName("videoPlayer");
 
@@ -73,12 +78,22 @@ VideoTestWidget::VideoTestWidget(QWidget *parent) :
 
     QUrl videoUrl = QUrl::fromLocalFile(videoPath);
     if (!videoUrl.isEmpty() && videoUrl.isValid()) {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        mediaPlayer->setSource(videoUrl);
+#else
         mediaPlayer->setMedia(videoUrl);
+#endif
         durationChanged(mediaPlayer->duration());
         positionChanged(mediaPlayer->position());
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         volumeChanged(mediaPlayer->volume());
+#endif
         playButton->setEnabled(true);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+        QSize resolution = mediaPlayer->metaData()[QMediaMetaData::Resolution].toSize();
+#else
         QSize resolution = mediaPlayer->media().canonicalResource().resolution();
+#endif
         this->setGeometry(0,0, resolution.width(), resolution.height());
     }
 
@@ -92,7 +107,11 @@ VideoTestWidget::~VideoTestWidget()
 
 void VideoTestWidget::play()
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    if(mediaPlayer->playbackState() == QMediaPlayer::PlayingState){
+#else
     if(mediaPlayer->state() == QMediaPlayer::PlayingState){
+#endif
         mediaPlayer->pause();
         playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     } else {
@@ -101,10 +120,12 @@ void VideoTestWidget::play()
     }
 }
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 void VideoTestWidget::setVolume(int volume)
 {
     mediaPlayer->setVolume(volume);
 }
+#endif
 
 void VideoTestWidget::setPlayingPosition(int pos)
 {
