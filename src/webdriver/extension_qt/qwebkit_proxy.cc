@@ -167,7 +167,8 @@ void JSLogger::error(QVariant message) {
 
 QWebkitProxy::QWebkitProxy(Session* session, QWebPage* webpage) :
 				session_(session),
-				page_(webpage) {}
+				page_(webpage),
+				online_(false) {}
 
 QWebkitProxy::~QWebkitProxy() {}
 
@@ -1230,12 +1231,16 @@ Error* QWebkitProxy::GetMute(const ElementId& element, bool* mute) {
 
 Error* QWebkitProxy::SetOnline(bool online) {
 #ifndef QT_NO_BEARERMANAGEMENT
+    online_ = online;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QNetworkAccessManager *manager = page_->networkAccessManager();
-    if (online){
+
+    if (online_){
         manager->setNetworkAccessible(QNetworkAccessManager::Accessible);
     } else {
         manager->setNetworkAccessible(QNetworkAccessManager::NotAccessible);
     }
+#endif
     return NULL;
 #else
     session_->logger().Log(kWarningLogLevel, "In QWebkitProxy::SetOnline() defined QT_NO_BEARERMANAGEMENT");
@@ -1245,12 +1250,16 @@ Error* QWebkitProxy::SetOnline(bool online) {
 
 Error* QWebkitProxy::IsOnline(bool* online) {
 #ifndef QT_NO_BEARERMANAGEMENT
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    *online = online_;
+#else
     QNetworkAccessManager *manager = page_->networkAccessManager();
     if (manager->networkAccessible() == QNetworkAccessManager::NotAccessible) {
         *online = false;
     } else {
         *online = true;
     }
+#endif
     return NULL;
 #else
     session_->logger().Log(kWarningLogLevel, "In QWebkitProxy::IsOnline() defined QT_NO_BEARERMANAGEMENT");

@@ -204,6 +204,7 @@ public:
 protected:
     Session* session_;
     QWebPage* page_;
+    bool online_;
 
     QWebFrame* FindFrameByMeta(QWebFrame* parent, const FramePath &frame_path);
     QWebFrame* FindFrameByPath(QWebFrame* parent, const FramePath &frame_path);
