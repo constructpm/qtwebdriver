@@ -183,7 +183,7 @@ void Quick2ViewCmdExecutor::SendKeys(const ElementId& element, const string16& k
 
     std::list<QKeyEvent>::iterator it = key_events.begin();
     while (it != key_events.end()) {
-        view->sendEvent(pItem, &(*it));
+        QCoreApplication::sendEvent(pItem, &(*it));
         ++it;
     }
 }
@@ -219,7 +219,7 @@ void Quick2ViewCmdExecutor::SendKeys(const string16& keys, Error** error) {
 
         if (!consumed) {
             if (NULL != pFocusItem) {
-                view->sendEvent(pFocusItem, &(*it));
+                QCoreApplication::sendEvent(pFocusItem, &(*it));
             } else {
                 QGuiApplication::sendEvent(view, &(*it));
             }
