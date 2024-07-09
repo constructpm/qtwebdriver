@@ -81,6 +81,32 @@ private:
     QWebView* view_;
 };
 
+class QCursorMark : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit QCursorMark(QWidget* parent)
+        : QWidget(parent)
+    {
+        resize(2 * RADIUS, 2 * RADIUS);
+    }
+
+    virtual void paintEvent(QPaintEvent *event) {
+        QPainter painter(this);
+        painter.setPen(QPen(Qt::red));
+
+        QBrush brush = painter.brush();
+        brush.setColor(Qt::red);
+        brush.setStyle(Qt::SolidPattern);
+        painter.setBrush(brush);
+
+        painter.drawEllipse(QPoint(RADIUS, RADIUS), RADIUS, RADIUS);
+    }
+
+private:
+    static const int RADIUS = 5;
+};
+
 }  // namespace webdriver
 
 #endif // WEB_VIEW_VISUALIZER_H
