@@ -27,6 +27,4 @@ sudo apt-get install -y \
 sudo ln -s /usr/bin/python3 /usr/bin/python
 
 # Download our prebuilt version of Qt
-curl -L https://github.com/constructpm/qt-build/releases/download/v6.7.1-1/qt-6.7.1-cpp17-ubuntu-22.04-x64.tar.gz | sudo tar xvJ -C /opt
-# Download our prebuilt version of QtWebkit
-curl -L https://github.com/constructpm/qtwebkit-build/releases/download/v6.212.0-1/qtwebkit-ee690e4-cpp17-ubuntu-22.04-x64.tar.gz | sudo tar xvJ -C /opt
+curl -L https://github.com/constructpm/qt-build/releases/download/v6.7.1-2/qt-6.7.1-cpp17-ubuntu-22.04-x64.tar.gz | sudo tar xvJ -C /opt

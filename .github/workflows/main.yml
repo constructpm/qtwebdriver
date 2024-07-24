@@ -74,11 +74,7 @@ jobs:
 
       - name: Install Qt
         run: |
-          curl -L https://github.com/constructpm/qt-build/releases/download/v6.7.1-1/qt-6.7.1-cpp17-ubuntu-22.04-x64.tar.gz | sudo tar xvJ -C /opt
-
-      - name: Install Qtwebkit
-        run: |
-          curl -L https://github.com/constructpm/qtwebkit-build/releases/download/v6.212.0-1/qtwebkit-ee690e4-cpp17-ubuntu-22.04-x64.tar.gz | sudo tar xvJ -C /opt
+          curl -L https://github.com/constructpm/qt-build/releases/download/v6.7.1-2/qt-6.7.1-cpp17-ubuntu-22.04-x64.tar.gz | sudo tar xvJ -C /opt
 
       - name: checkout
         uses: actions/checkout@v4
